@@ -1,7 +1,6 @@
 package br.com.brunno.api.order_food_service.restaurant.service;
 
-import br.com.brunno.api.order_food_service.restaurant.dto.RestaurantCreateRequest;
-import br.com.brunno.api.order_food_service.restaurant.dto.RestaurantResponse;
+import br.com.brunno.api.order_food_service.restaurant.command.CreateRestaurantCommand;
 import br.com.brunno.api.order_food_service.restaurant.entity.Restaurant;
 import br.com.brunno.api.order_food_service.restaurant.exception.RestaurantException;
 import br.com.brunno.api.order_food_service.restaurant.repository.RestaurantRepository;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service responsável pela lógica de negócio dos restaurantes
@@ -29,67 +27,57 @@ public class RestaurantService {
      * Criar um novo restaurante
      */
     @Transactional
-    public RestaurantResponse createRestaurant(RestaurantCreateRequest request) {
+    public Restaurant createRestaurant(CreateRestaurantCommand command) {
         // Validar dados do restaurante
-        validateRestaurantData(request);
+        validateRestaurantData(command);
 
         // Verificar se CNPJ já existe
-        if (restaurantRepository.existsByCnpj(request.getCnpj())) {
-            throw RestaurantException.cnpjAlreadyExists(request.getCnpj());
+        if (restaurantRepository.existsByCnpj(command.getCnpj())) {
+            throw RestaurantException.cnpjAlreadyExists(command.getCnpj());
         }
 
         // Verificar se usuário já tem restaurante
-        if (restaurantRepository.existsByUserId(request.getUserId())) {
-            throw RestaurantException.userAlreadyHasRestaurant(request.getUserId());
+        if (restaurantRepository.existsByUserId(command.getUserId())) {
+            throw RestaurantException.userAlreadyHasRestaurant(command.getUserId());
         }
 
         // Criar entidade do restaurante
         Restaurant restaurant = new Restaurant(
-            request.getUserId(),
-            request.getName(),
-            request.getCnpj(),
-            request.getDescription(),
-            request.getAddress(),
-            request.getPhone()
+            command.getUserId(),
+            command.getName(),
+            command.getCnpj()
         );
 
-        // Salvar no banco de dados
-        Restaurant savedRestaurant = restaurantRepository.save(restaurant);
-
-        // Retornar DTO de resposta
-        return RestaurantResponse.fromEntity(savedRestaurant);
+        // Salvar no banco de dados e retornar entidade
+        return restaurantRepository.save(restaurant);
     }
 
     /**
      * Listar todos os restaurantes
      */
-    public List<RestaurantResponse> findAll() {
-        List<Restaurant> restaurants = restaurantRepository.findAll();
-        return restaurants.stream()
-                .map(RestaurantResponse::fromEntity)
-                .collect(Collectors.toList());
+    public List<Restaurant> findAll() {
+        return restaurantRepository.findAll();
     }
 
     /**
      * Buscar restaurante por ID
      */
-    public RestaurantResponse findById(Long id) {
-        Restaurant restaurant = restaurantRepository.findById(id)
+    public Restaurant findById(Long id) {
+        return restaurantRepository.findById(id)
                 .orElseThrow(() -> RestaurantException.restaurantNotFound(id));
-        return RestaurantResponse.fromEntity(restaurant);
     }
 
     /**
      * Validar dados do restaurante
      */
-    private void validateRestaurantData(RestaurantCreateRequest request) {
-        if (request.getUserId() == null) {
+    private void validateRestaurantData(CreateRestaurantCommand command) {
+        if (command.getUserId() == null) {
             throw RestaurantException.invalidRestaurantData("userId");
         }
-        if (request.getName() == null || request.getName().trim().isEmpty()) {
+        if (command.getName() == null || command.getName().trim().isEmpty()) {
             throw RestaurantException.invalidRestaurantData("name");
         }
-        if (request.getCnpj() == null || request.getCnpj().trim().isEmpty()) {
+        if (command.getCnpj() == null || command.getCnpj().trim().isEmpty()) {
             throw RestaurantException.invalidRestaurantData("cnpj");
         }
     }

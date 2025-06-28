@@ -12,23 +12,16 @@ public class RestaurantResponse {
     private Long userId;
     private String name;
     private String cnpj;
-    private String description;
-    private String address;
-    private String phone;
     private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public RestaurantResponse(Long id, Long userId, String name, String cnpj, String description, 
-                            String address, String phone, Boolean isActive, 
+    public RestaurantResponse(Long id, Long userId, String name, String cnpj, Boolean isActive, 
                             LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.cnpj = cnpj;
-        this.description = description;
-        this.address = address;
-        this.phone = phone;
         this.isActive = isActive;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -41,9 +34,6 @@ public class RestaurantResponse {
             restaurant.getUserId(),
             restaurant.getName(),
             restaurant.getCnpj(),
-            restaurant.getDescription(),
-            restaurant.getAddress(),
-            restaurant.getPhone(),
             restaurant.getIsActive(),
             restaurant.getCreatedAt(),
             restaurant.getUpdatedAt()
@@ -83,30 +73,6 @@ public class RestaurantResponse {
         this.cnpj = cnpj;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public Boolean getIsActive() {
         return isActive;
     }
@@ -138,9 +104,6 @@ public class RestaurantResponse {
                 ", userId=" + userId +
                 ", name='" + name + '\'' +
                 ", cnpj='" + cnpj + '\'' +
-                ", description='" + description + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
                 ", isActive=" + isActive +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

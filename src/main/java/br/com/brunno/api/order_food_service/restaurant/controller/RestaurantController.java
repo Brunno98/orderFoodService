@@ -1,7 +1,9 @@
 package br.com.brunno.api.order_food_service.restaurant.controller;
 
+import br.com.brunno.api.order_food_service.restaurant.command.CreateRestaurantCommand;
 import br.com.brunno.api.order_food_service.restaurant.dto.RestaurantCreateRequest;
 import br.com.brunno.api.order_food_service.restaurant.dto.RestaurantResponse;
+import br.com.brunno.api.order_food_service.restaurant.entity.Restaurant;
 import br.com.brunno.api.order_food_service.restaurant.service.RestaurantService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller responsável por gerenciar as operações de restaurantes
@@ -30,7 +33,14 @@ public class RestaurantController {
      */
     @PostMapping
     public ResponseEntity<RestaurantResponse> createRestaurant(@Valid @RequestBody RestaurantCreateRequest request) {
-        RestaurantResponse response = restaurantService.createRestaurant(request);
+        CreateRestaurantCommand command = new CreateRestaurantCommand(
+            request.getUserId(),
+            request.getName(),
+            request.getCnpj()
+        );
+        
+        Restaurant restaurant = restaurantService.createRestaurant(command);
+        RestaurantResponse response = RestaurantResponse.fromEntity(restaurant);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -39,8 +49,11 @@ public class RestaurantController {
      */
     @GetMapping
     public ResponseEntity<List<RestaurantResponse>> getAllRestaurants() {
-        List<RestaurantResponse> restaurants = restaurantService.findAll();
-        return ResponseEntity.ok(restaurants);
+        List<Restaurant> restaurants = restaurantService.findAll();
+        List<RestaurantResponse> responses = restaurants.stream()
+                .map(RestaurantResponse::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
     }
 
     /**
@@ -48,8 +61,9 @@ public class RestaurantController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponse> getRestaurantById(@PathVariable Long id) {
-        RestaurantResponse restaurant = restaurantService.findById(id);
-        return ResponseEntity.ok(restaurant);
+        Restaurant restaurant = restaurantService.findById(id);
+        RestaurantResponse response = RestaurantResponse.fromEntity(restaurant);
+        return ResponseEntity.ok(response);
     }
 
     // TODO: Implementar endpoints para:

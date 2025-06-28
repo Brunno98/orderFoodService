@@ -24,15 +24,6 @@ public class Restaurant {
     @Column(name = "cnpj", nullable = false, unique = true, length = 18)
     private String cnpj;
 
-    @Column(name = "description", length = 1000)
-    private String description;
-
-    @Column(name = "address", length = 500)
-    private String address;
-
-    @Column(name = "phone", length = 20)
-    private String phone;
-
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
@@ -45,13 +36,10 @@ public class Restaurant {
     // Construtores
     public Restaurant() {}
 
-    public Restaurant(Long userId, String name, String cnpj, String description, String address, String phone) {
+    public Restaurant(Long userId, String name, String cnpj) {
         this.userId = userId;
         this.name = name;
         this.cnpj = cnpj;
-        this.description = description;
-        this.address = address;
-        this.phone = phone;
         this.isActive = true;
         this.createdAt = LocalDateTime.now();
     }
@@ -103,30 +91,6 @@ public class Restaurant {
         this.cnpj = cnpj;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public Boolean getIsActive() {
         return isActive;
     }
@@ -172,9 +136,6 @@ public class Restaurant {
                 ", userId=" + userId +
                 ", name='" + name + '\'' +
                 ", cnpj='" + cnpj + '\'' +
-                ", description='" + description + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
                 ", isActive=" + isActive +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

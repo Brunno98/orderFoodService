@@ -4,10 +4,7 @@ Content-Type: application/json
 {
   "userId": 1,
   "name": "Restaurante Exemplo",
-  "cnpj": "11.222.333/0001-81",
-  "description": "Restaurante de comida brasileira",
-  "address": "Rua das Flores, 123",
-  "phone": "11987654321"
+  "cnpj": "11222333000181"
 }
 
 
