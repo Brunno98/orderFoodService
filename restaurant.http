@@ -1,0 +1,17 @@
+POST http://localhost:8080/api/restaurants
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "name": "Restaurante Exemplo",
+  "cnpj": "11.222.333/0001-81",
+  "description": "Restaurante de comida brasileira",
+  "address": "Rua das Flores, 123",
+  "phone": "11987654321"
+}
+
+
+---
+
+### Listar todos os restaurantes
+GET http://localhost:8080/api/restaurants
