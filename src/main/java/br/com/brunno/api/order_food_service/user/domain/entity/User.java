@@ -14,7 +14,6 @@ public class User {
     private final UUID id;
     private String nome;
     private String email;
-    private String senha;
     private UserType tipo;
     
     /**
@@ -28,11 +27,10 @@ public class User {
     /**
      * Construtor para criação de um novo usuário
      */
-    public User(String nome, String email, String senha, UserType tipo) {
+    public User(String nome, String email, UserType tipo) {
         this.id = UUID.randomUUID();
         this.nome = nome;
         this.email = email;
-        this.senha = senha;
         this.tipo = tipo;
         validate();
     }
@@ -40,11 +38,10 @@ public class User {
     /**
      * Construtor para reconstrução de um usuário existente
      */
-    public User(UUID id, String nome, String email, String senha, UserType tipo) {
+    public User(UUID id, String nome, String email, UserType tipo) {
         this.id = id;
         this.nome = nome;
         this.email = email;
-        this.senha = senha;
         this.tipo = tipo;
         validate();
     }
@@ -63,14 +60,6 @@ public class User {
         
         if (!isValidEmail(email)) {
             throw new IllegalArgumentException("Email deve ter formato válido");
-        }
-        
-        if (senha == null || senha.trim().isEmpty()) {
-            throw new IllegalArgumentException("Senha não pode ser vazia");
-        }
-        
-        if (senha.length() < 6) {
-            throw new IllegalArgumentException("Senha deve ter pelo menos 6 caracteres");
         }
         
         if (tipo == null) {
@@ -104,28 +93,6 @@ public class User {
     }
     
     /**
-     * Método para alterar a senha
-     */
-    public void changePassword(String novaSenha) {
-        if (novaSenha == null || novaSenha.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nova senha não pode ser vazia");
-        }
-        
-        if (novaSenha.length() < 6) {
-            throw new IllegalArgumentException("Senha deve ter pelo menos 6 caracteres");
-        }
-        
-        this.senha = novaSenha;
-    }
-    
-    /**
-     * Método para verificar se a senha fornecida é válida
-     */
-    public boolean isValidPassword(String senhaFornecida) {
-        return this.senha.equals(senhaFornecida);
-    }
-    
-    /**
      * Verifica se o usuário é do tipo CLIENTE
      */
     public boolean isCliente() {
@@ -150,10 +117,6 @@ public class User {
     
     public String getEmail() {
         return email;
-    }
-    
-    public String getSenha() {
-        return senha;
     }
     
     public UserType getTipo() {

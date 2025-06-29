@@ -16,7 +16,6 @@ class UserTest {
 
     private static final String NOME_VALIDO = "João Silva";
     private static final String EMAIL_VALIDO = "joao@email.com";
-    private static final String SENHA_VALIDA = "123456";
     private static final User.UserType TIPO_VALIDO = User.UserType.CLIENTE;
 
     @Nested
@@ -27,13 +26,12 @@ class UserTest {
         @DisplayName("Deve criar usuário com construtor de novo usuário")
         void deveCriarUsuarioComConstrutorDeNovoUsuario() {
             // When
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
 
             // Then
             assertNotNull(user.getId());
             assertEquals(NOME_VALIDO, user.getNome());
             assertEquals(EMAIL_VALIDO, user.getEmail());
-            assertEquals(SENHA_VALIDA, user.getSenha());
             assertEquals(TIPO_VALIDO, user.getTipo());
         }
 
@@ -44,13 +42,12 @@ class UserTest {
             UUID id = UUID.randomUUID();
 
             // When
-            User user = new User(id, NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(id, NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
 
             // Then
             assertEquals(id, user.getId());
             assertEquals(NOME_VALIDO, user.getNome());
             assertEquals(EMAIL_VALIDO, user.getEmail());
-            assertEquals(SENHA_VALIDA, user.getSenha());
             assertEquals(TIPO_VALIDO, user.getTipo());
         }
 
@@ -58,8 +55,8 @@ class UserTest {
         @DisplayName("Deve gerar IDs diferentes para usuários diferentes")
         void deveGerarIdsDiferentesParaUsuariosDiferentes() {
             // When
-            User user1 = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
-            User user2 = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user1 = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
+            User user2 = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
 
             // Then
             assertNotEquals(user1.getId(), user2.getId());
@@ -77,7 +74,7 @@ class UserTest {
         void deveLancarExcecaoQuandoNomeForInvalido(String nomeInvalido) {
             // Then
             assertThrows(IllegalArgumentException.class, () -> {
-                new User(nomeInvalido, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+                new User(nomeInvalido, EMAIL_VALIDO, TIPO_VALIDO);
             }, "Nome não pode ser vazio");
         }
 
@@ -85,7 +82,7 @@ class UserTest {
         @DisplayName("Deve aceitar nome válido")
         void deveAceitarNomeValido() {
             // When
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
 
             // Then
             assertEquals(NOME_VALIDO, user.getNome());
@@ -103,7 +100,7 @@ class UserTest {
         void deveLancarExcecaoQuandoEmailForVazio(String emailVazio) {
             // Then
             assertThrows(IllegalArgumentException.class, () -> {
-                new User(NOME_VALIDO, emailVazio, SENHA_VALIDA, TIPO_VALIDO);
+                new User(NOME_VALIDO, emailVazio, TIPO_VALIDO);
             }, "Email não pode ser vazio");
         }
 
@@ -113,7 +110,7 @@ class UserTest {
         void deveLancarExcecaoQuandoEmailTiverFormatoInvalido(String emailInvalido) {
             // Then
             assertThrows(IllegalArgumentException.class, () -> {
-                new User(NOME_VALIDO, emailInvalido, SENHA_VALIDA, TIPO_VALIDO);
+                new User(NOME_VALIDO, emailInvalido, TIPO_VALIDO);
             }, "Email deve ter formato válido");
         }
 
@@ -122,47 +119,10 @@ class UserTest {
         @DisplayName("Deve aceitar emails válidos")
         void deveAceitarEmailsValidos(String emailValido) {
             // When
-            User user = new User(NOME_VALIDO, emailValido, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(NOME_VALIDO, emailValido, TIPO_VALIDO);
 
             // Then
             assertEquals(emailValido, user.getEmail());
-        }
-    }
-
-    @Nested
-    @DisplayName("Validações de Senha")
-    class ValidacoesSenhaTest {
-
-        @ParameterizedTest
-        @NullAndEmptySource
-        @ValueSource(strings = {" ", "  ", "\t", "\n"})
-        @DisplayName("Deve lançar exceção quando senha for vazia")
-        void deveLancarExcecaoQuandoSenhaForVazia(String senhaVazia) {
-            // Then
-            assertThrows(IllegalArgumentException.class, () -> {
-                new User(NOME_VALIDO, EMAIL_VALIDO, senhaVazia, TIPO_VALIDO);
-            }, "Senha não pode ser vazia");
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = {"123", "abc", "12", "a"})
-        @DisplayName("Deve lançar exceção quando senha for muito curta")
-        void deveLancarExcecaoQuandoSenhaForMuitoCurta(String senhaCurta) {
-            // Then
-            assertThrows(IllegalArgumentException.class, () -> {
-                new User(NOME_VALIDO, EMAIL_VALIDO, senhaCurta, TIPO_VALIDO);
-            }, "Senha deve ter pelo menos 6 caracteres");
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = {"123456", "abcdef", "senha123", "minhasenha"})
-        @DisplayName("Deve aceitar senhas válidas")
-        void deveAceitarSenhasValidas(String senhaValida) {
-            // When
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, senhaValida, TIPO_VALIDO);
-
-            // Then
-            assertEquals(senhaValida, user.getSenha());
         }
     }
 
@@ -175,7 +135,7 @@ class UserTest {
         void deveLancarExcecaoQuandoTipoForNulo() {
             // Then
             assertThrows(IllegalArgumentException.class, () -> {
-                new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, null);
+                new User(NOME_VALIDO, EMAIL_VALIDO, null);
             }, "Tipo de usuário não pode ser nulo");
         }
 
@@ -183,7 +143,7 @@ class UserTest {
         @DisplayName("Deve aceitar tipo CLIENTE")
         void deveAceitarTipoCliente() {
             // When
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, User.UserType.CLIENTE);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, User.UserType.CLIENTE);
 
             // Then
             assertEquals(User.UserType.CLIENTE, user.getTipo());
@@ -195,7 +155,7 @@ class UserTest {
         @DisplayName("Deve aceitar tipo RESTAURANTE")
         void deveAceitarTipoRestaurante() {
             // When
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, User.UserType.RESTAURANTE);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, User.UserType.RESTAURANTE);
 
             // Then
             assertEquals(User.UserType.RESTAURANTE, user.getTipo());
@@ -212,7 +172,7 @@ class UserTest {
         @DisplayName("Deve atualizar nome e email válidos")
         void deveAtualizarNomeEEmailValidos() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
             String novoNome = "Maria Santos";
             String novoEmail = "maria@email.com";
 
@@ -228,7 +188,7 @@ class UserTest {
         @DisplayName("Deve manter nome atual quando novo nome for nulo")
         void deveManterNomeAtualQuandoNovoNomeForNulo() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
 
             // When
             user.update(null, EMAIL_VALIDO);
@@ -241,7 +201,7 @@ class UserTest {
         @DisplayName("Deve manter email atual quando novo email for nulo")
         void deveManterEmailAtualQuandoNovoEmailForNulo() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
 
             // When
             user.update(NOME_VALIDO, null);
@@ -254,93 +214,12 @@ class UserTest {
         @DisplayName("Deve lançar exceção quando novo email for inválido")
         void deveLancarExcecaoQuandoNovoEmailForInvalido() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
 
             // Then
             assertThrows(IllegalArgumentException.class, () -> {
                 user.update(NOME_VALIDO, "emailinvalido");
             }, "Email deve ter formato válido");
-        }
-    }
-
-    @Nested
-    @DisplayName("Método ChangePassword")
-    class MetodoChangePasswordTest {
-
-        @Test
-        @DisplayName("Deve alterar senha com senha válida")
-        void deveAlterarSenhaComSenhaValida() {
-            // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
-            String novaSenha = "novaSenha123";
-
-            // When
-            user.changePassword(novaSenha);
-
-            // Then
-            assertEquals(novaSenha, user.getSenha());
-        }
-
-        @ParameterizedTest
-        @NullAndEmptySource
-        @ValueSource(strings = {" ", "  ", "\t", "\n"})
-        @DisplayName("Deve lançar exceção quando nova senha for vazia")
-        void deveLancarExcecaoQuandoNovaSenhaForVazia(String senhaVazia) {
-            // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
-
-            // Then
-            assertThrows(IllegalArgumentException.class, () -> {
-                user.changePassword(senhaVazia);
-            }, "Nova senha não pode ser vazia");
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = {"123", "abc", "12", "a"})
-        @DisplayName("Deve lançar exceção quando nova senha for muito curta")
-        void deveLancarExcecaoQuandoNovaSenhaForMuitoCurta(String senhaCurta) {
-            // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
-
-            // Then
-            assertThrows(IllegalArgumentException.class, () -> {
-                user.changePassword(senhaCurta);
-            }, "Senha deve ter pelo menos 6 caracteres");
-        }
-    }
-
-    @Nested
-    @DisplayName("Método IsValidPassword")
-    class MetodoIsValidPasswordTest {
-
-        @Test
-        @DisplayName("Deve retornar true quando senha for válida")
-        void deveRetornarTrueQuandoSenhaForValida() {
-            // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
-
-            // When & Then
-            assertTrue(user.isValidPassword(SENHA_VALIDA));
-        }
-
-        @Test
-        @DisplayName("Deve retornar false quando senha for inválida")
-        void deveRetornarFalseQuandoSenhaForInvalida() {
-            // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
-
-            // When & Then
-            assertFalse(user.isValidPassword("senhaErrada"));
-        }
-
-        @Test
-        @DisplayName("Deve retornar false quando senha for nula")
-        void deveRetornarFalseQuandoSenhaForNula() {
-            // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
-
-            // When & Then
-            assertFalse(user.isValidPassword(null));
         }
     }
 
@@ -352,7 +231,7 @@ class UserTest {
         @DisplayName("isCliente deve retornar true para usuário CLIENTE")
         void isClienteDeveRetornarTrueParaUsuarioCliente() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, User.UserType.CLIENTE);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, User.UserType.CLIENTE);
 
             // When & Then
             assertTrue(user.isCliente());
@@ -362,7 +241,7 @@ class UserTest {
         @DisplayName("isCliente deve retornar false para usuário RESTAURANTE")
         void isClienteDeveRetornarFalseParaUsuarioRestaurante() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, User.UserType.RESTAURANTE);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, User.UserType.RESTAURANTE);
 
             // When & Then
             assertFalse(user.isCliente());
@@ -372,7 +251,7 @@ class UserTest {
         @DisplayName("isRestaurante deve retornar true para usuário RESTAURANTE")
         void isRestauranteDeveRetornarTrueParaUsuarioRestaurante() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, User.UserType.RESTAURANTE);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, User.UserType.RESTAURANTE);
 
             // When & Then
             assertTrue(user.isRestaurante());
@@ -382,7 +261,7 @@ class UserTest {
         @DisplayName("isRestaurante deve retornar false para usuário CLIENTE")
         void isRestauranteDeveRetornarFalseParaUsuarioCliente() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, User.UserType.CLIENTE);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, User.UserType.CLIENTE);
 
             // When & Then
             assertFalse(user.isRestaurante());
@@ -398,8 +277,8 @@ class UserTest {
         void deveSerIgualQuandoIdsForemIguais() {
             // Given
             UUID id = UUID.randomUUID();
-            User user1 = new User(id, NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
-            User user2 = new User(id, "Nome Diferente", "email@diferente.com", "senhaDiferente", User.UserType.RESTAURANTE);
+            User user1 = new User(id, NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
+            User user2 = new User(id, "Nome Diferente", "email@diferente.com", User.UserType.RESTAURANTE);
 
             // When & Then
             assertEquals(user1, user2);
@@ -410,8 +289,8 @@ class UserTest {
         @DisplayName("Deve ser diferente quando IDs forem diferentes")
         void deveSerDiferenteQuandoIdsForemDiferentes() {
             // Given
-            User user1 = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
-            User user2 = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user1 = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
+            User user2 = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
 
             // When & Then
             assertNotEquals(user1, user2);
@@ -422,7 +301,7 @@ class UserTest {
         @DisplayName("Deve ser diferente de null")
         void deveSerDiferenteDeNull() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
 
             // When & Then
             assertNotEquals(null, user);
@@ -432,7 +311,7 @@ class UserTest {
         @DisplayName("Deve ser diferente de objeto de outro tipo")
         void deveSerDiferenteDeObjetoDeOutroTipo() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
             String string = "não é um User";
 
             // When & Then
@@ -445,10 +324,10 @@ class UserTest {
     class ToStringTest {
 
         @Test
-        @DisplayName("Deve retornar string sem senha")
-        void deveRetornarStringSemSenha() {
+        @DisplayName("Deve retornar string com informações do usuário")
+        void deveRetornarStringComInformacoesDoUsuario() {
             // Given
-            User user = new User(NOME_VALIDO, EMAIL_VALIDO, SENHA_VALIDA, TIPO_VALIDO);
+            User user = new User(NOME_VALIDO, EMAIL_VALIDO, TIPO_VALIDO);
 
             // When
             String result = user.toString();
@@ -458,8 +337,6 @@ class UserTest {
             assertTrue(result.contains("nome='" + NOME_VALIDO + "'"));
             assertTrue(result.contains("email='" + EMAIL_VALIDO + "'"));
             assertTrue(result.contains("tipo=" + TIPO_VALIDO));
-            assertFalse(result.contains("senha"));
-            assertFalse(result.contains(SENHA_VALIDA));
         }
     }
 
