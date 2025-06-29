@@ -2,7 +2,6 @@ package br.com.brunno.api.order_food_service.user.infrastructure.persistence.ent
 
 import br.com.brunno.api.order_food_service.user.domain.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

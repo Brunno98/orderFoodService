@@ -1,6 +1,7 @@
 package br.com.brunno.api.order_food_service.user.infrastructure.web;
 
 import br.com.brunno.api.order_food_service.user.domain.exceptions.UserAlreadyExistsException;
+import br.com.brunno.api.order_food_service.user.domain.exceptions.UserNotFoundException;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -57,6 +58,21 @@ public class UserExceptionHandler {
         );
         
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+    
+    /**
+     * Trata exceção quando usuário não é encontrado
+     */
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<UserErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
+        UserErrorResponse errorResponse = new UserErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.NOT_FOUND.value(),
+            "Usuário não encontrado",
+            ex.getMessage()
+        );
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
     
     /**

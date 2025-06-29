@@ -66,4 +66,18 @@ Content-Type: application/json
   "nome": "Pedro Oliveira",
   "email": "pedro.oliveira@empresa.com.br",
   "tipo": "CLIENTE"
-} 
+}
+
+---
+
+### Listar todos os usuários
+GET http://localhost:8080/api/users HTTP/1.1
+Accept: application/json
+---
+
+### Buscar usuário por ID (substitua {id} pelo UUID real)
+GET http://localhost:8080/api/users/83ebd62e-bc05-4994-b146-b450226b6e0e
+---
+
+### Buscar usuário por ID inexistente (teste de erro 404)
+GET http://localhost:8080/api/users/00000000-0000-0000-0000-000000000000 

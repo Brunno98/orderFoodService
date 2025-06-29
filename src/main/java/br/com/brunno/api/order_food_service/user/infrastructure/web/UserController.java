@@ -3,15 +3,24 @@
 package br.com.brunno.api.order_food_service.user.infrastructure.web;
 
 import br.com.brunno.api.order_food_service.user.application.usecase.CreateUserUseCase;
+import br.com.brunno.api.order_food_service.user.application.usecase.GetUserUseCase;
+import br.com.brunno.api.order_food_service.user.application.usecase.ListUsersUseCase;
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.CreateUserRequest;
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.CreateUserResponse;
+import br.com.brunno.api.order_food_service.user.application.usecase.dto.get.GetUserResponse;
+import br.com.brunno.api.order_food_service.user.application.usecase.dto.list.ListUsersResponse;
+import br.com.brunno.api.order_food_service.user.domain.exceptions.UserNotFoundException;
 import br.com.brunno.api.order_food_service.user.infrastructure.web.dto.CreateUserWebRequest;
 import br.com.brunno.api.order_food_service.user.infrastructure.web.dto.CreateUserWebResponse;
+import br.com.brunno.api.order_food_service.user.infrastructure.web.dto.GetUserWebResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Controller REST para operações de usuário.
@@ -23,6 +32,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     
     private final CreateUserUseCase createUserUseCase;
+    private final GetUserUseCase getUserUseCase;
+    private final ListUsersUseCase listUsersUseCase;
     
     /**
      * Cria um novo usuário
@@ -51,4 +62,45 @@ public class UserController {
         
         return ResponseEntity.status(HttpStatus.CREATED).body(webResponse);
     }
+    
+    /**
+     * Busca um usuário pelo ID
+     * @param id ID do usuário
+     * @return dados do usuário encontrado
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<GetUserWebResponse> getUserById(@PathVariable UUID id) {
+        GetUserResponse useCaseResponse = getUserUseCase.execute(id)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com ID: " + id));
+        
+        GetUserWebResponse webResponse = new GetUserWebResponse(
+            useCaseResponse.getId(),
+            useCaseResponse.getNome(),
+            useCaseResponse.getEmail(),
+            useCaseResponse.getTipo()
+        );
+        
+        return ResponseEntity.ok(webResponse);
+    }
+    
+    /**
+     * Lista todos os usuários
+     * @return lista de usuários
+     */
+    @GetMapping
+    public ResponseEntity<List<GetUserWebResponse>> getAllUsers() {
+        ListUsersResponse useCaseResponse = listUsersUseCase.execute();
+        
+        List<GetUserWebResponse> webResponses = useCaseResponse.getUsers().stream()
+                .map(userItem -> new GetUserWebResponse(
+                    userItem.getId(),
+                    userItem.getNome(),
+                    userItem.getEmail(),
+                    userItem.getTipo()
+                ))
+                .toList();
+        
+        return ResponseEntity.ok(webResponses);
+    }
+    
 } 
