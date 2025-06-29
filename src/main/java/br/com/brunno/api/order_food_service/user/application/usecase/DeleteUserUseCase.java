@@ -1,0 +1,1 @@
+// Arquivo para o DeleteUserUseCase - Camada de Aplicação 

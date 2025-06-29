@@ -1,0 +1,1 @@
+// Arquivo para o GetUserUseCase - Camada de Aplicação 

@@ -1,0 +1,1 @@
+// Arquivo para o DTO UpdateUserRequest - Camada de Infraestrutura 

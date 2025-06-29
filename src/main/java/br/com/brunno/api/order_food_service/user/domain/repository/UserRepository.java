@@ -1,0 +1,1 @@
+// Arquivo para a interface UserRepository - Camada de Domínio 

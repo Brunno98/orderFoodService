@@ -1,0 +1,1 @@
+// Arquivo para o DTO CreateUserRequest - Camada de Infraestrutura 

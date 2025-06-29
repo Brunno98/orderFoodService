@@ -1,0 +1,1 @@
+// Arquivo para o UserJpaRepository - Camada de Infraestrutura 

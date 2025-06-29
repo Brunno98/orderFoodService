@@ -1,0 +1,1 @@
+// Arquivo para o UserPersistenceAdapter - Camada de Infraestrutura 

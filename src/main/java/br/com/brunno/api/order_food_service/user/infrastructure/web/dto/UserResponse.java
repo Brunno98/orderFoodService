@@ -1,0 +1,1 @@
+// Arquivo para o DTO UserResponse - Camada de Infraestrutura 

@@ -1,0 +1,1 @@
+// Arquivo para a entidade User - Camada de Domínio 
