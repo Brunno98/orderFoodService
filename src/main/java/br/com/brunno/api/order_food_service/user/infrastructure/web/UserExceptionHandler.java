@@ -27,7 +27,7 @@ public class UserExceptionHandler {
      * Trata exceções de validação Bean Validation
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<UserErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<UserValidationErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -35,11 +35,11 @@ public class UserExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         
-        UserErrorResponse errorResponse = new UserErrorResponse(
+        UserValidationErrorResponse errorResponse = new UserValidationErrorResponse(
             LocalDateTime.now(),
             HttpStatus.BAD_REQUEST.value(),
-            "Erro de validação",
-            errors.toString()
+            errors,
+            "Erro de validação"
         );
         
         return ResponseEntity.badRequest().body(errorResponse);
@@ -144,6 +144,56 @@ public class UserExceptionHandler {
         
         public void setError(String error) {
             this.error = error;
+        }
+        
+        public String getMessage() {
+            return message;
+        }
+        
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
+
+    /**
+     * Classe para representar a resposta de erro específica do módulo User
+     */
+    public static class UserValidationErrorResponse {
+        private LocalDateTime timestamp;
+        private int status;
+        private Map<String, String> errors;
+        private String message;
+        
+        public UserValidationErrorResponse(LocalDateTime timestamp, int status, Map<String, String> errors, String message) {
+            this.timestamp = timestamp;
+            this.status = status;
+            this.errors = errors;
+            this.message = message;
+        }
+        
+        // Getters e Setters
+        public LocalDateTime getTimestamp() {
+            return timestamp;
+        }
+        
+        public void setTimestamp(LocalDateTime timestamp) {
+            this.timestamp = timestamp;
+        }
+        
+        public int getStatus() {
+            return status;
+        }
+        
+        public void setStatus(int status) {
+            this.status = status;
+        }
+        
+        public Map<String, String> getErrors() {
+            return errors;
+        }
+        
+        public void setError(Map<String, String> errors) {
+            this.errors = errors;
         }
         
         public String getMessage() {
