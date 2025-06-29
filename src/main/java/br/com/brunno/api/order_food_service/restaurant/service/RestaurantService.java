@@ -5,7 +5,6 @@ import br.com.brunno.api.order_food_service.restaurant.command.CreateRestaurantC
 import br.com.brunno.api.order_food_service.restaurant.entity.Restaurant;
 import br.com.brunno.api.order_food_service.restaurant.exception.RestaurantException;
 import br.com.brunno.api.order_food_service.restaurant.repository.RestaurantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,6 @@ public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
 
-    @Autowired
     public RestaurantService(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
     }

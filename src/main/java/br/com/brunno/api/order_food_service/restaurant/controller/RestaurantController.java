@@ -6,7 +6,6 @@ import br.com.brunno.api.order_food_service.restaurant.dto.RestaurantResponse;
 import br.com.brunno.api.order_food_service.restaurant.entity.Restaurant;
 import br.com.brunno.api.order_food_service.restaurant.service.RestaurantService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,6 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
 
-    @Autowired
     public RestaurantController(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
     }
