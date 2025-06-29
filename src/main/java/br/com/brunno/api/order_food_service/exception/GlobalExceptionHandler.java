@@ -1,6 +1,9 @@
 package br.com.brunno.api.order_food_service.exception;
 
 import br.com.brunno.api.order_food_service.restaurant.exception.RestaurantException;
+
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -15,6 +18,7 @@ import java.util.Map;
 /**
  * Handler global para tratamento de exceções
  */
+@Order(Ordered.LOWEST_PRECEDENCE)
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

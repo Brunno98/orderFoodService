@@ -1,0 +1,69 @@
+### Criar usuário CLIENTE
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "email": "joao@email.com",
+  "tipo": "CLIENTE"
+}
+
+---
+
+### Criar usuário RESTAURANTE
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "nome": "Maria Santos",
+  "email": "maria@restaurante.com",
+  "tipo": "RESTAURANTE"
+}
+
+---
+
+### Criar usuário com dados inválidos (teste de validação)
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "nome": "",
+  "email": "email-invalido",
+  "tipo": null
+}
+
+---
+
+### Criar usuário com email duplicado (teste de conflito)
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "nome": "João Silva Duplicado",
+  "email": "joao@email.com",
+  "tipo": "CLIENTE"
+}
+
+---
+
+### Criar usuário com nome muito longo
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "nome": "Nome muito longo que pode causar problemas de validação se houver limite de caracteres",
+  "email": "nome.longo@email.com",
+  "tipo": "CLIENTE"
+}
+
+---
+
+### Criar usuário com email corporativo
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "nome": "Pedro Oliveira",
+  "email": "pedro.oliveira@empresa.com.br",
+  "tipo": "CLIENTE"
+} 
