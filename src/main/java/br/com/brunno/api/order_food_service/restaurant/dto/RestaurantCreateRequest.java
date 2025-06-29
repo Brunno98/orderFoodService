@@ -24,25 +24,13 @@ public class RestaurantCreateRequest {
     @Pattern(regexp = "\\d{14}", message = "CNPJ deve conter exatamente 14 dígitos numéricos")
     private String cnpj;
 
-    @Size(max = 1000, message = "Descrição deve ter no máximo 1000 caracteres")
-    private String description;
-
-    @Size(max = 500, message = "Endereço deve ter no máximo 500 caracteres")
-    private String address;
-
-    @Pattern(regexp = "\\d{10,11}", message = "Telefone deve conter 10 ou 11 dígitos numéricos")
-    private String phone;
-
     // Construtores
     public RestaurantCreateRequest() {}
 
-    public RestaurantCreateRequest(Long userId, String name, String cnpj, String description, String address, String phone) {
+    public RestaurantCreateRequest(Long userId, String name, String cnpj) {
         this.userId = userId;
         this.name = name;
         this.cnpj = cnpj;
-        this.description = description;
-        this.address = address;
-        this.phone = phone;
     }
 
     // Getters e Setters
@@ -70,39 +58,12 @@ public class RestaurantCreateRequest {
         this.cnpj = cnpj;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     @Override
     public String toString() {
         return "RestaurantCreateRequest{" +
                 "userId=" + userId +
                 ", name='" + name + '\'' +
                 ", cnpj='" + cnpj + '\'' +
-                ", description='" + description + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
                 '}';
     }
 } 

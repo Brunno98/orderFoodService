@@ -1,5 +1,6 @@
 package br.com.brunno.api.order_food_service.restaurant.service;
 
+import br.com.brunno.api.order_food_service.exception.ResourceNotFoundException;
 import br.com.brunno.api.order_food_service.restaurant.command.CreateRestaurantCommand;
 import br.com.brunno.api.order_food_service.restaurant.entity.Restaurant;
 import br.com.brunno.api.order_food_service.restaurant.exception.RestaurantException;
@@ -64,7 +65,7 @@ public class RestaurantService {
      */
     public Restaurant findById(Long id) {
         return restaurantRepository.findById(id)
-                .orElseThrow(() -> RestaurantException.restaurantNotFound(id));
+                .orElseThrow(() -> ResourceNotFoundException.restaurantNotFound(id));
     }
 
     /**

@@ -1,5 +1,6 @@
 package br.com.brunno.api.order_food_service.restaurant.service;
 
+import br.com.brunno.api.order_food_service.exception.ResourceNotFoundException;
 import br.com.brunno.api.order_food_service.restaurant.command.CreateRestaurantCommand;
 import br.com.brunno.api.order_food_service.restaurant.entity.Restaurant;
 import br.com.brunno.api.order_food_service.restaurant.exception.RestaurantException;
@@ -258,7 +259,7 @@ class RestaurantServiceTest {
         when(restaurantRepository.findById(restaurantId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        RestaurantException exception = assertThrows(RestaurantException.class, 
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, 
             () -> restaurantService.findById(restaurantId));
         
         assertEquals("Restaurante não encontrado com ID: " + restaurantId, exception.getMessage());
