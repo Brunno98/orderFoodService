@@ -189,7 +189,7 @@ class UserControllerIntegrationTest {
     @DisplayName("Deve retornar erro quando email já existe")
     void deveRetornarErroQuandoEmailJaExiste() throws Exception {
         // Given
-        UserJpaEntity userExistente = userJpaRepository.save(new UserJpaEntity(
+        userJpaRepository.save(new UserJpaEntity(
             UUID.randomUUID(),
             "Usuário Existente",
             "email.existente@email.com",

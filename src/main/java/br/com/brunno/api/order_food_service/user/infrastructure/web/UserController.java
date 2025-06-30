@@ -9,7 +9,6 @@ import br.com.brunno.api.order_food_service.user.application.usecase.ListUsersUs
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.CreateUserRequest;
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.CreateUserResponse;
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.DeleteUserRequest;
-import br.com.brunno.api.order_food_service.user.application.usecase.dto.DeleteUserResponse;
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.get.GetUserResponse;
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.list.ListUsersResponse;
 import br.com.brunno.api.order_food_service.user.domain.exceptions.UserNotFoundException;
