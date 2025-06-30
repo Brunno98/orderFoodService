@@ -3,10 +3,13 @@
 package br.com.brunno.api.order_food_service.user.infrastructure.web;
 
 import br.com.brunno.api.order_food_service.user.application.usecase.CreateUserUseCase;
+import br.com.brunno.api.order_food_service.user.application.usecase.DeleteUserUseCase;
 import br.com.brunno.api.order_food_service.user.application.usecase.GetUserUseCase;
 import br.com.brunno.api.order_food_service.user.application.usecase.ListUsersUseCase;
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.CreateUserRequest;
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.CreateUserResponse;
+import br.com.brunno.api.order_food_service.user.application.usecase.dto.DeleteUserRequest;
+import br.com.brunno.api.order_food_service.user.application.usecase.dto.DeleteUserResponse;
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.get.GetUserResponse;
 import br.com.brunno.api.order_food_service.user.application.usecase.dto.list.ListUsersResponse;
 import br.com.brunno.api.order_food_service.user.domain.exceptions.UserNotFoundException;
@@ -34,6 +37,7 @@ public class UserController {
     private final CreateUserUseCase createUserUseCase;
     private final GetUserUseCase getUserUseCase;
     private final ListUsersUseCase listUsersUseCase;
+    private final DeleteUserUseCase deleteUserUseCase;
     
     /**
      * Cria um novo usuário
@@ -101,6 +105,19 @@ public class UserController {
                 .toList();
         
         return ResponseEntity.ok(webResponses);
+    }
+    
+    /**
+     * Exclui um usuário pelo ID
+     * @param id ID do usuário a ser excluído
+     * @return resposta com informações sobre a exclusão
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
+        DeleteUserRequest request = new DeleteUserRequest(id);
+        deleteUserUseCase.execute(request);
+        
+        return ResponseEntity.noContent().build();
     }
     
 } 

@@ -21,7 +21,7 @@ public class UserJpaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "domain_id",nullable = false, unique = true)
     private UUID domainId;
     
     @Column(nullable = false)

@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Testa desde a camada de controller até a persistência de dados
  */
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("integration-test")
 @Transactional
 class RestaurantControllerIntegrationTest {
 

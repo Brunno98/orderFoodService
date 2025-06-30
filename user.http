@@ -81,3 +81,8 @@ GET http://localhost:8080/api/users/83ebd62e-bc05-4994-b146-b450226b6e0e
 
 ### Buscar usuário por ID inexistente (teste de erro 404)
 GET http://localhost:8080/api/users/00000000-0000-0000-0000-000000000000 
+
+---
+### Deleta usuario por ID
+DELETE http://localhost:8080/api/users/29616370-9e89-4894-b9be-6b45db9e3f08
+---

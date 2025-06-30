@@ -7,6 +7,7 @@ import br.com.brunno.api.order_food_service.user.domain.repository.UserRepositor
 import br.com.brunno.api.order_food_service.user.infrastructure.persistence.entity.UserJpaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +57,7 @@ public class UserPersistenceAdapter implements UserRepository {
     }
     
     @Override
+    @Transactional
     public void deleteById(UUID id) {
         userJpaRepository.deleteByDomainId(id);
     }

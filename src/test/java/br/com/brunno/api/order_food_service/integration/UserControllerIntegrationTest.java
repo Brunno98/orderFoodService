@@ -1,4 +1,4 @@
-package br.com.brunno.api.order_food_service.user.infrastructure.web;
+package br.com.brunno.api.order_food_service.integration;
 
 import br.com.brunno.api.order_food_service.user.domain.entity.User;
 import br.com.brunno.api.order_food_service.user.infrastructure.persistence.UserJpaRepository;
@@ -24,6 +24,9 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Utiliza MockMvc para testar os endpoints HTTP com banco H2 em memória.
  */
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("integration-test")
 class UserControllerIntegrationTest {
 
     @Autowired
@@ -207,6 +210,79 @@ class UserControllerIntegrationTest {
                 .andExpect(jsonPath("$.message").value(containsString("Já existe um usuário com o email")));
     }
 
+    @Test
+    @DisplayName("Deve excluir usuário com sucesso")
+    void deveExcluirUsuarioComSucesso() throws Exception {
+        // Given
+        UserJpaEntity userParaExcluir = userJpaRepository.save(new UserJpaEntity(
+            UUID.randomUUID(),
+            "Usuário para Excluir",
+            "usuario.excluir@email.com",
+            User.UserType.CLIENTE
+        ));
+
+        // Verificar que o usuário existe antes da exclusão
+        assertTrue(userJpaRepository.findByDomainId(userParaExcluir.getDomainId()).isPresent());
+
+        // When & Then
+        mockMvc.perform(delete("/api/users/{id}", userParaExcluir.getDomainId()))
+                .andExpect(status().isNoContent());
+
+        // Verificar que o usuário foi realmente excluído
+        assertFalse(userJpaRepository.findByDomainId(userParaExcluir.getDomainId()).isPresent());
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 quando tentar excluir usuário inexistente")
+    void deveRetornar404QuandoTentarExcluirUsuarioInexistente() throws Exception {
+        // Given - Usando um UUID constante que com certeza não existe
+        UUID idInexistente = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
+        // When & Then
+        mockMvc.perform(delete("/api/users/{id}", idInexistente))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value(containsString("Usuário não encontrado")));
+    }
+
+    @Test
+    @DisplayName("Deve excluir usuário e manter outros usuários intactos")
+    void deveExcluirUsuarioEManterOutrosIntactos() throws Exception {
+        // Given
+        UserJpaEntity user1 = userJpaRepository.save(new UserJpaEntity(
+            UUID.randomUUID(),
+            "Usuário 1",
+            "usuario1@email.com",
+            User.UserType.CLIENTE
+        ));
+
+        UserJpaEntity user2 = userJpaRepository.save(new UserJpaEntity(
+            UUID.randomUUID(),
+            "Usuário 2",
+            "usuario2@email.com",
+            User.UserType.RESTAURANTE
+        ));
+
+        UserJpaEntity user3 = userJpaRepository.save(new UserJpaEntity(
+            UUID.randomUUID(),
+            "Usuário 3",
+            "usuario3@email.com",
+            User.UserType.CLIENTE
+        ));
+
+        // Verificar que todos os usuários existem
+        assertEquals(3, userJpaRepository.count());
+
+        // When - Excluir apenas o user2
+        mockMvc.perform(delete("/api/users/{id}", user2.getDomainId()))
+                .andExpect(status().isNoContent());
+
+        // Then - Verificar que apenas o user2 foi excluído
+        assertFalse(userJpaRepository.findByDomainId(user2.getDomainId()).isPresent());
+        assertTrue(userJpaRepository.findByDomainId(user1.getDomainId()).isPresent());
+        assertTrue(userJpaRepository.findByDomainId(user3.getDomainId()).isPresent());
+        assertEquals(2, userJpaRepository.count());
+    }
+
     // Métodos auxiliares para testes parametrizados
 
     static Stream<Arguments> dadosUsuariosValidos() {
@@ -226,6 +302,14 @@ class UserControllerIntegrationTest {
             Arguments.of("Nome Válido", null, User.UserType.CLIENTE, "email"),
             Arguments.of("Nome Válido", "email-invalido", User.UserType.CLIENTE, "email"),
             Arguments.of("Nome Válido", "email@teste.com", null, "tipo")
+        );
+    }
+
+    static Stream<Arguments> dadosUsuariosParaExcluir() {
+        return Stream.of(
+            Arguments.of("Cliente para Excluir", "cliente.excluir@email.com", User.UserType.CLIENTE),
+            Arguments.of("Restaurante para Excluir", "restaurante.excluir@email.com", User.UserType.RESTAURANTE),
+            Arguments.of("Usuário Teste", "usuario.teste@email.com", User.UserType.CLIENTE)
         );
     }
 } 
